@@ -6,6 +6,11 @@ class SpenAnalyzer(private val inputText: String){
     val varList = mutableListOf<String>()
     val spenList = mutableListOf<Spen>()
 
+    init{
+        generateVarList()
+        generateSpenList()
+    }
+
     private fun generateVarList() {
         val specialChar = '\\'
         val varSymbols = arrayOf('$', '@', '%')
@@ -27,7 +32,7 @@ class SpenAnalyzer(private val inputText: String){
                     identifier += char
                     char = inputText[++i]
                 }
-                while (char.isLetterOrDigit() || (char in availableSymbols)) { // проверку на конец файла?
+                while ((char.isLetterOrDigit() || (char in availableSymbols)) && (i != inputText.length - 1)) { // проверку на конец файла?
                     identifier += char
                     char = inputText[++i]
                 }
@@ -53,7 +58,16 @@ class SpenAnalyzer(private val inputText: String){
             if (i in varMap.keys) {
                 varMap[i] = varMap[i]!!.toInt() + 1
             } else
-                varMap[i] = 1
+                varMap[i] = 0
         }
+        for (i in varMap.keys){
+            varMap[i]?.let {
+                spenList.add(Spen(i, it))
+            }
+        }
+    }
+
+    fun getSpinList(): List<Spen>{
+        return spenList
     }
 }
