@@ -2,11 +2,12 @@ package application
 
 import application.Models.Spen
 
-class SpenAnalyzer(private val inputText: String){
+class SpenAnalyzer(private var inputText: String){
     val varList = mutableListOf<String>()
     val spenList = mutableListOf<Spen>()
 
     init{
+        inputText = removeTrash(inputText)
         generateVarList()
         generateSpenList()
     }
@@ -39,15 +40,6 @@ class SpenAnalyzer(private val inputText: String){
                 if (identifier.length != 1)
                     varList.add(identifier)
             }
-//            } else if (char.isDigit()) {
-//                var identifier = ""
-//                while (char.isLetterOrDigit() || (char in availableSymbols)) { // проверку на конец файла?
-//                    identifier += char
-//                    char = inputText[++i]
-//                }
-//                varList.add(identifier)
-//
-//            }
             i++
         }
     }
@@ -65,9 +57,11 @@ class SpenAnalyzer(private val inputText: String){
                 spenList.add(Spen(i, it))
             }
         }
+        var count = 0;
+        for (i in spenList){
+            count += i.spen
+        }
+        spenList.add(Spen("Суммарный спен", count))
     }
 
-    fun getSpinList(): List<Spen>{
-        return spenList
-    }
 }

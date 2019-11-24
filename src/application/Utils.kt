@@ -1,6 +1,12 @@
 package application
 
-fun removeTrash(text: String): String{
+val controlOperators = listOf(
+    "unitl", "for", "foreach", "if", "elsif", "while", "unless"
+)
+
+val operations = listOf('+', '-', '*', '/')
+
+fun removeTrash(text: String): String {
     var result = removeBlockComments(text)
     result = removeLineComments(result)
     return removeStrings(result)
@@ -97,4 +103,44 @@ fun removeStrings(text: String): String {
         i++
     }
     return builder.toString()
+}
+
+fun getVarListFromText(inputText: String): List<String> {
+    val varList = mutableListOf<String>()
+    val specialChar = '\\'
+    val varSymbols = arrayOf('$', '@', '%')
+    val availableSymbols = arrayOf('_', '\'')
+
+    var i = 0
+    while (i < inputText.length) {
+        var char = inputText[i]
+        if (char == specialChar) {
+            i += 2
+            continue
+        }
+        if (char in varSymbols) {
+            var identifier = "" + char
+            char = inputText[++i]
+            while (char == ' ')
+                char = inputText[++i]
+            if (char.isLetter() || (char in availableSymbols)) {
+                identifier += char
+                if (i != inputText.length - 1)
+                    char = inputText[++i]
+                else
+                    break
+            }
+            while (char.isLetterOrDigit() || (char in availableSymbols)) { // проверку на конец файла?
+                identifier += char
+                if (i != inputText.length - 1)
+                    char = inputText[++i]
+                else
+                    break
+            }
+            if (identifier.length != 1)
+                varList.add(identifier)
+        }
+        i++
+    }
+    return varList
 }
