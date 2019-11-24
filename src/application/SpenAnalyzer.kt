@@ -1,10 +1,11 @@
 package application
 
-import application.Models.Spen
+import application.Models.SpenField
 
 class SpenAnalyzer(private var inputText: String){
     val varList = mutableListOf<String>()
-    val spenList = mutableListOf<Spen>()
+    val spenList = mutableListOf<SpenField>()
+
 
     init{
         inputText = removeTrash(inputText)
@@ -54,14 +55,14 @@ class SpenAnalyzer(private var inputText: String){
         }
         for (i in varMap.keys){
             varMap[i]?.let {
-                spenList.add(Spen(i, it))
+                spenList.add(SpenField(i, it))
             }
         }
         var count = 0;
         for (i in spenList){
             count += i.spen
         }
-        spenList.add(Spen("Суммарный спен", count))
+        spenList.add(SpenField("Суммарный спен", count))
     }
 
 }

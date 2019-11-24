@@ -32,70 +32,79 @@ class ChapinAnalayzer(private val inputText: String) {
 
     }
 
-    private fun getP(): List<String>{
+    fun getP(): List<String> {
         return Pgroup
     }
 
-    private fun getM(): List<String>{
+    fun getM(): List<String> {
         return Mgroup
     }
 
-    private fun getC(): List<String>{
+    fun getC(): List<String> {
         return Cgroup
     }
 
-    private fun getT(): List<String>{
+    fun getT(): List<String> {
         return Tgroup
     }
 
-    private fun getPIO(): List<String>{
+    fun getPIO(): List<String> {
         return Pgroup.filter { it in IOgroup }
     }
 
-    private fun geMPIO(): List<String>{
+    fun getMIO(): List<String> {
         return Mgroup.filter { it in IOgroup }
 
     }
 
-    private fun getCIO(): List<String>{
+    fun getCIO(): List<String> {
         return Cgroup.filter { it in IOgroup }
     }
 
-    private fun getTIO(): List<String>{
+    fun getTIO(): List<String> {
         return Tgroup.filter { it in IOgroup }
     }
 
-    private fun generateTgroup(){
-        for (i in varList){
-            if ((i !in controlVarList) && (i !in outputVarList) && (i !in rightVarList)){
+    fun getChapin(): Double{
+        return getP().size + getM() .size * 2 + getC().size * 3 + getT().size * 0.5
+    }
+
+    fun getChapinIO(): Double{
+        return getPIO().size + getMIO() .size * 2 + getCIO().size * 3 + getTIO().size * 0.5
+    }
+
+
+    private fun generateTgroup() {
+        for (i in varList) {
+            if ((i !in controlVarList) && (i !in outputVarList) && (i !in rightVarList)) {
                 Tgroup.add(i)
             }
         }
     }
 
-    private fun generatePgroup(){
+    private fun generatePgroup() {
         val varList = mutableListOf<String>()
-        for (i in inputVarList){
-            if ((i !in controlVarList) && (i !in changeVarList)){
+        for (i in inputVarList) {
+            if ((i !in controlVarList) && (i !in changeVarList)) {
                 varList.add(i)
             }
         }
         Pgroup.addAll(varList)
     }
 
-    private fun generateMgroup(){
+    private fun generateMgroup() {
         val varList = mutableListOf<String>()
-        for (i in changeVarList){
-            if (i !in controlVarList){
+        for (i in changeVarList) {
+            if (i !in controlVarList) {
                 varList.add(i)
             }
         }
         Mgroup.addAll(varList)
     }
 
-    private fun generateChangeVarList(){
-        for (i in leftVarList){
-            if (leftVarList.count { it == i } == 2){
+    private fun generateChangeVarList() {
+        for (i in leftVarList) {
+            if (leftVarList.count { it == i } == 2) {
                 changeVarList.add(i)
             }
         }
@@ -113,12 +122,13 @@ class ChapinAnalayzer(private val inputText: String) {
             wordBuffer += char
 
             if (((inputText[i] == '=') && (inputText[i - 1] != '=') && (inputText[i + 1] != '=') && (inputText[i - 1] != '!'))
-        || ((inputText[i] in operations) && (inputText[i + 1] != '=') && (inputText[i + 1] !in operations))){
+                || ((inputText[i] in operations) && (inputText[i + 1] != '=') && (inputText[i + 1] !in operations))
+            ) {
                 val d = inputText[i]
                 val d2 = inputText[i + 1]
                 val d3 = inputText[i - 1]
                 var value = ""
-               var j = i - 1
+                var j = i - 1
                 char = inputText[j]
                 while ((char != ';') && (char != '(') && (char != '{')) {
                     value += char
