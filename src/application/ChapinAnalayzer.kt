@@ -1,5 +1,7 @@
 package application
 
+import application.Models.ChapinField
+
 class ChapinAnalayzer(private val inputText: String) {
     val varList = mutableListOf<String>()
     val inputVarList = mutableListOf<String>()
@@ -27,8 +29,8 @@ class ChapinAnalayzer(private val inputText: String) {
         generateCgroup()
         generateIOgroup()
         generatePgroup()
-        generateMgroup()
         generateTgroup()
+        generateMgroup()
 
     }
 
@@ -65,6 +67,24 @@ class ChapinAnalayzer(private val inputText: String) {
         return Tgroup.filter { it in IOgroup }
     }
 
+    fun getChapinFields(): List<ChapinField>{
+        return listOf(
+            ChapinField("P", getP(), getP().size),
+            ChapinField("M", getM(), getM().size),
+            ChapinField("C", getC(), getC().size),
+            ChapinField("T", getT(), getT().size)
+        )
+    }
+
+    fun getChapinFieldsIO(): List<ChapinField>{
+        return listOf(
+            ChapinField("P", getPIO(), getPIO().size),
+            ChapinField("M", getMIO(), getMIO().size),
+            ChapinField("C", getCIO(), getCIO().size),
+            ChapinField("T", getTIO(), getTIO().size)
+        )
+    }
+
     fun getChapin(): Double{
         return getP().size + getM() .size * 2 + getC().size * 3 + getT().size * 0.5
     }
@@ -93,13 +113,11 @@ class ChapinAnalayzer(private val inputText: String) {
     }
 
     private fun generateMgroup() {
-        val varList = mutableListOf<String>()
-        for (i in changeVarList) {
-            if (i !in controlVarList) {
-                varList.add(i)
+        for (i in varList) {
+            if ((i !in controlVarList) && (i !in Tgroup) && (i !in Cgroup) && (i !in Pgroup)) {
+                Mgroup.add(i)
             }
         }
-        Mgroup.addAll(varList)
     }
 
     private fun generateChangeVarList() {
@@ -130,9 +148,11 @@ class ChapinAnalayzer(private val inputText: String) {
                 var value = ""
                 var j = i - 1
                 char = inputText[j]
-                while ((char != ';') && (char != '(') && (char != '{')) {
+                while ((char != ';') && (char != '(') && (char != '{') && (j != -1))  {
                     value += char
                     j--
+                    if (j == 0)
+                        break
                     char = inputText[j]
                 }
                 val sb = StringBuffer(value)

@@ -22,7 +22,7 @@ public class Controller {
     private String filePath = null;
 
     private ObservableList<SpenField> spenFields = FXCollections.observableArrayList();
-    private ObservableList<ChapinField> chapinields = FXCollections.observableArrayList();
+    private ObservableList<ChapinField> chapinFields = FXCollections.observableArrayList();
     private ObservableList<ChapinField> chapinFieldsIO =  FXCollections.observableArrayList();
     private String text;
     @FXML
@@ -91,6 +91,8 @@ public class Controller {
             filePathText.setText(file.getName());
             text = new String(Files.readAllBytes(Paths.get(filePath)));
             setSpenTable();
+            setChapinTable();
+            setChapinTableIO();
         }
     }
 
@@ -99,7 +101,7 @@ public class Controller {
         groupName.setCellValueFactory(new PropertyValueFactory<>("name"));
         groupVar.setCellValueFactory(new PropertyValueFactory<>("variables"));
         grouCount.setCellValueFactory(new PropertyValueFactory<>("count"));
-        chapin.setItems(chapinields);
+        chapin.setItems(chapinFields);
 
         groupNameIO.setCellValueFactory(new PropertyValueFactory<>("name"));
         groupVarIO.setCellValueFactory(new PropertyValueFactory<>("variables"));
@@ -109,6 +111,20 @@ public class Controller {
         spenId.setCellValueFactory(new PropertyValueFactory<>("name"));
         spenValue.setCellValueFactory(new PropertyValueFactory<>("spen"));
         spen.setItems(spenFields);
+    }
+
+    private void setChapinTable(){
+        ChapinAnalayzer analayzer = new ChapinAnalayzer(text);
+        chapinFields.clear();
+        chapinFields.setAll(analayzer.getChapinFields());
+        chapinValue.setText(Double.toString(analayzer.getChapin()));
+    }
+
+    private void setChapinTableIO(){
+        ChapinAnalayzer analayzer = new ChapinAnalayzer(text);
+        chapinFieldsIO.clear();
+        chapinFieldsIO.setAll(analayzer.getChapinFieldsIO());
+        chapinValueIO.setText(Double.toString(analayzer.getChapinIO()));
     }
 
     private void setSpenTable(){

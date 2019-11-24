@@ -120,6 +120,7 @@ fun getVarListFromText(inputText: String): List<String> {
         }
         if (char in varSymbols) {
             var identifier = "" + char
+            var last = true
             char = inputText[++i]
             while (char == ' ')
                 char = inputText[++i]
@@ -128,12 +129,13 @@ fun getVarListFromText(inputText: String): List<String> {
                 if (i != inputText.length - 1)
                     char = inputText[++i]
                 else
-                    break
+                    last = false
             }
-            while (char.isLetterOrDigit() || (char in availableSymbols)) { // проверку на конец файла?
-                identifier += char
-                if (i != inputText.length - 1)
+            while ((char.isLetterOrDigit() || (char in availableSymbols)) && last) { // проверку на конец файла?
+                    identifier += char
+                if (i != inputText.length - 1) {
                     char = inputText[++i]
+                }
                 else
                     break
             }
